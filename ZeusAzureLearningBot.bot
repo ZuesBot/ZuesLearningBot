@@ -1,0 +1,18 @@
+{
+    "name": "ZeusAzureLearningBot",
+    "description": "",
+    "services": [
+        {
+            "type": "endpoint",
+            "name": "http://localhost:3978/api/messages",
+            "id": "946e8570-4410-11ed-b1b7-cf8e46300447",
+            "appId": "708b70b2-8fb7-4d6c-a193-7da041d648dc",
+            "appPassword": "D[#vk@ZybPZ>p.m9%8;Q=]lMQ",
+            "endpoint": "http://localhost:3978/api/messages"
+        }
+    ],
+    "padlock": "",
+    "version": "2.0",
+    "path": "C:\\Development\\Chatbot\\ZeusAzureLearningBot.bot",
+    "overrides": null
+}
