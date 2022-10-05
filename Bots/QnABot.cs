@@ -12,6 +12,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using QnABot.Factories;
 using QnABot.Factories.bot.Factories;
+using QnABot.Helper;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
@@ -61,23 +62,26 @@ namespace Microsoft.BotBuilderSamples.Bots
                     await turnContext.SendActivityAsync(MessageFactory.Text(defaultWelcome), cancellationToken);
                     await turnContext.SendActivityAsync(MessageFactory.Text("How can I help you ?"), cancellationToken);
 
-                    Attachment optionsCard;
-                    _adaptiveCardFactory = new AdaptiveCardFactory();
-                    optionsCard = _adaptiveCardFactory.CreateOptionsCard();
-                    await turnContext.SendActivityAsync(MessageFactory.Attachment(optionsCard), cancellationToken);
+                    //Attachment optionsCard;
+                    //_adaptiveCardFactory = new AdaptiveCardFactory();
+                    //optionsCard = _adaptiveCardFactory.CreateOptionsCard();
+                    //await turnContext.SendActivityAsync(MessageFactory.Attachment(optionsCard), cancellationToken);
 
-                    var reply = MessageFactory.Text("What is your favorite color?");
+                    //await turnContext.SendActivityAsync(MessageFactory.Attachment(Cards.GetHeroCard().ToAttachment()), cancellationToken);
 
-                    reply.SuggestedActions = new SuggestedActions()
-                    {
-                        Actions = new List<CardAction>()
-        {
-            new CardAction() { Title = "Red", Type = ActionTypes.ImBack, Value = "Red", Image = "https://via.placeholder.com/20/FF0000?text=R", ImageAltText = "R" },
-            new CardAction() { Title = "Yellow", Type = ActionTypes.ImBack, Value = "Yellow", Image = "https://via.placeholder.com/20/FFFF00?text=Y", ImageAltText = "Y" },
-            new CardAction() { Title = "Blue", Type = ActionTypes.ImBack, Value = "Blue", Image = "https://via.placeholder.com/20/0000FF?text=B", ImageAltText = "B" },
-        },
-                    };
-                    await turnContext.SendActivityAsync(reply, cancellationToken);
+                    //var reply = MessageFactory.Text("Which level Azure certification are you looking for?");
+
+                    //reply.SuggestedActions = new SuggestedActions()
+                    //{
+                    //    Actions = new List<CardAction>()
+                    //    {
+                    //        new CardAction() { Title = "Beginner", Type = ActionTypes.ImBack, Value = "https://learn.microsoft.com/en-us/certifications/exams/az-900"},
+                    //        new CardAction() { Title = "Intermediate", Type = ActionTypes.ImBack, Value = "AZ-204"},
+                    //        new CardAction() { Title = "Expert", Type = ActionTypes.ImBack, Value = "AZ-500"},
+                    //    },
+                    //};
+
+                    //await turnContext.SendActivityAsync(reply, cancellationToken);
                 }
             }
         }
