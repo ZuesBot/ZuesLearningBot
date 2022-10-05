@@ -14,7 +14,6 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using QnABot.Factories;
 using QnABot.Factories.bot.Factories;
-using QnABot.Helper;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
