@@ -21,6 +21,4 @@
     </ItemGroup>
 
     <Import Project="PostDeployScripts\IncludeSources.targets" />
-    <Import Project="..\PostDeployScripts\IncludeSources.targets"/>
-
 </Project>
