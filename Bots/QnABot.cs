@@ -51,10 +51,8 @@ namespace Microsoft.BotBuilderSamples.Bots
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            // Run the Dialog with the new message Activity.
-            await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
-
             var response = Convert.ToString(turnContext.Activity.Text);
+
             if (response == "No")
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text("Thanks for the chat.  Have a great day and i hope we speak again!"), cancellationToken);
@@ -76,23 +74,40 @@ namespace Microsoft.BotBuilderSamples.Bots
 
                 await turnContext.SendActivityAsync(reply, cancellationToken);
             }
+            else if (response == "Roadmap")
+            {
+
+                var roadMap_heroCard = new HeroCard
+                {
+                    Title = "Azure Certification Roadmap",
+                    Subtitle = "Course roadmap",
+                    Text = "This roadmap will give you guidance on a certification path that best suits your needs",
+                    Images = new List<CardImage> { new CardImage("https://learn.microsoft.com/en-us/certifications/posts/images/azure-apps-and-infrastructure.jpg") },
+                    //Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.microsoft.com/bot-framework") },
+                };
+
+                await turnContext.SendActivityAsync(MessageFactory.Attachment(roadMap_heroCard.ToAttachment()), cancellationToken);
+
+                var moreHelp = MessageFactory.Text("Is there anything else i can help you with today?");
+
+                moreHelp.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = new List<CardAction>()
+                        {
+                            //new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "Yes"},
+                            new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "No"},
+                            new CardAction() { Title = "Main Menu", Type = ActionTypes.ImBack, Value = "Main Menu"},
+                        },
+                };
+
+                await turnContext.SendActivityAsync(moreHelp, cancellationToken);
+            }
             else
             {
-                if (response == "Roadmap")
-                {
 
-                    var roadMap_heroCard = new HeroCard
-                    {
-                        Title = "Azure Certification Roadmap",
-                        Subtitle = "Course roadmap",
-                        Text = "This roadmap will give you guidance on a certification path that best suits your needs",
-                        Images = new List<CardImage> { new CardImage("https://learn.microsoft.com/en-us/certifications/posts/images/azure-apps-and-infrastructure.jpg") },
-                        //Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.microsoft.com/bot-framework") },
-                    };
 
-                    await turnContext.SendActivityAsync(MessageFactory.Attachment(roadMap_heroCard.ToAttachment()), cancellationToken);
-                }
-
+                // Run the Dialog with the new message Activity.
+                await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
 
                 var moreHelp = MessageFactory.Text("Is there anything else i can help you with today?");
 
@@ -137,7 +152,7 @@ namespace Microsoft.BotBuilderSamples.Bots
 
                     var reply = MessageFactory.Text("Lets begin by choosing to view courses by skill level, viewing the Azure certification course path or if you already know your question you can type it in at any time:");
 
-                    
+
 
                     reply.SuggestedActions = new SuggestedActions()
                     {
