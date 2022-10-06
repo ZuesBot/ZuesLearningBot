@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Antlr4.Runtime.Misc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -14,6 +15,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using QnABot.Factories;
 using QnABot.Factories.bot.Factories;
+//using QnABot.Helper;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
@@ -22,7 +24,7 @@ namespace Microsoft.BotBuilderSamples.Bots
         protected readonly BotState ConversationState;
         protected readonly Microsoft.Bot.Builder.Dialogs.Dialog Dialog;
         protected readonly BotState UserState;
-        protected string defaultWelcome = "Hello! Welcome to Azure certification agent.";
+        protected string defaultWelcome = "Hello! Welcome to Azure certification agent.  Im happy to assist you with your Azure journey.";
         AdaptiveCardFactory _adaptiveCardFactory;
 
 
@@ -51,6 +53,60 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             // Run the Dialog with the new message Activity.
             await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
+
+            var response = Convert.ToString(turnContext.Activity.Text);
+            if (response == "No")
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text("Thanks for the chat.  Have a great day and i hope we speak again!"), cancellationToken);
+            }
+            else if (response == "Main Menu")
+            {
+                var reply = MessageFactory.Text("Choose the level of Azure certification based on your experience:");
+
+                reply.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = new List<CardAction>()
+                        {
+                            new CardAction() { Title = "Beginner", Type = ActionTypes.ImBack, Value = "AZ-900"},
+                            new CardAction() { Title = "Intermediate", Type = ActionTypes.ImBack, Value = "AZ-104"},
+                            new CardAction() { Title = "Expert", Type = ActionTypes.ImBack, Value = "AZ-305"},
+                        },
+                };
+
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
+            else
+            {
+                if (response == "Roadmap")
+                {
+
+                    var roadMap_heroCard = new HeroCard
+                    {
+                        Title = "Azure Certification Roadmap",
+                        Subtitle = "Course roadmap",
+                        Text = "This roadmap will give you guidance on a certification path that best suits your needs",
+                        Images = new List<CardImage> { new CardImage("https://learn.microsoft.com/en-us/certifications/posts/images/azure-apps-and-infrastructure.jpg") },
+                        //Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.microsoft.com/bot-framework") },
+                    };
+
+                    await turnContext.SendActivityAsync(MessageFactory.Attachment(roadMap_heroCard.ToAttachment()), cancellationToken);
+                }
+
+
+                var moreHelp = MessageFactory.Text("Is there anything else i can help you with today?");
+
+                moreHelp.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = new List<CardAction>()
+                        {
+                            new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "Yes"},
+                            new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "No"},
+                            new CardAction() { Title = "Main Menu", Type = ActionTypes.ImBack, Value = "Main Menu"},
+                        },
+                };
+
+                await turnContext.SendActivityAsync(moreHelp, cancellationToken);
+            }
         }
 
         //protected override async Task OnEventActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -58,6 +114,8 @@ namespace Microsoft.BotBuilderSamples.Bots
 
 
         //}
+
+
 
         // This is your entry point to the bot when a end user is added to the chat
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
@@ -76,19 +134,35 @@ namespace Microsoft.BotBuilderSamples.Bots
 
                     //await turnContext.SendActivityAsync(MessageFactory.Attachment(Cards.GetHeroCard().ToAttachment()), cancellationToken);
 
-                    var reply = MessageFactory.Text("Choose the level of Azure certification based on your experience:");
+                    var reply = MessageFactory.Text("Lets begin by choosing to view courses by skill level, viewing the Azure certification course path or if you already know your question you can type it in at any time:");
+
+                    
 
                     reply.SuggestedActions = new SuggestedActions()
                     {
                         Actions = new List<CardAction>()
                         {
-                            new CardAction() { Title = "Beginner", Type = ActionTypes.ImBack, Value = "AZ-900"},
-                            new CardAction() { Title = "Intermediate", Type = ActionTypes.ImBack, Value = "AZ-104"},
+                            new CardAction() { Title = "Fundamentals", Type = ActionTypes.ImBack, Value = "AZ-900"},
+                            new CardAction() { Title = "Associate", Type = ActionTypes.ImBack, Value = "AZ-104"},
                             new CardAction() { Title = "Expert", Type = ActionTypes.ImBack, Value = "AZ-305"},
+                            new CardAction() { Title = "Azure Roadmap", Type = ActionTypes.ImBack, Value = "Roadmap"},
                         },
                     };
 
                     await turnContext.SendActivityAsync(reply, cancellationToken);
+
+                    //reply = MessageFactory.Text("Is there anything else i can help you with today?");
+
+                    //reply.SuggestedActions = new SuggestedActions()
+                    //{
+                    //    Actions = new List<CardAction>()
+                    //    {
+                    //        new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "Yes"},
+                    //        new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "No"},
+                    //    },
+                    //};
+
+                    //await turnContext.SendActivityAsync(reply, cancellationToken);
 
 
                     Console.WriteLine("");
@@ -96,6 +170,7 @@ namespace Microsoft.BotBuilderSamples.Bots
 
 
                 }
+
             }
         }
     }
