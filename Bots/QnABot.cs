@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Antlr4.Runtime.Misc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -42,25 +41,25 @@ namespace Microsoft.BotBuilderSamples.Bots
             UserState = userState;
             Dialog = dialog;
 
-            var luisIsConfigured = !string.IsNullOrEmpty(configuration["LuisAppId"]) && !string.IsNullOrEmpty(configuration["LuisAPIKey"]) && !string.IsNullOrEmpty(configuration["LuisAPIHostName"]);
-            if (luisIsConfigured)
-            {
-                var luisApplication = new LuisApplication(
-                    configuration["LuisAppId"],
-                    configuration["LuisAPIKey"],
-                    "https://zeusluisservice.cognitiveservices.azure.com/");
-                // Set the recognizer options depending on which endpoint version you want to use.
-                // More details can be found in https://docs.microsoft.com/en-gb/azure/cognitive-services/luis/luis-migration-api-v3
-                var recognizerOptions = new LuisRecognizerOptionsV3(luisApplication)
-                {
-                    PredictionOptions = new Bot.Builder.AI.LuisV3.LuisPredictionOptions
-                    {
-                        IncludeInstanceData = true,
-                    }
-                };
+            //var luisIsConfigured = !string.IsNullOrEmpty(configuration["LuisAppId"]) && !string.IsNullOrEmpty(configuration["LuisAPIKey"]) && !string.IsNullOrEmpty(configuration["LuisAPIHostName"]);
+            //if (luisIsConfigured)
+            //{
+            //    var luisApplication = new LuisApplication(
+            //        configuration["LuisAppId"],
+            //        configuration["LuisAPIKey"],
+            //        "https://zeusluisservice.cognitiveservices.azure.com/");
+            //    // Set the recognizer options depending on which endpoint version you want to use.
+            //    // More details can be found in https://docs.microsoft.com/en-gb/azure/cognitive-services/luis/luis-migration-api-v3
+            //    var recognizerOptions = new LuisRecognizerOptionsV3(luisApplication)
+            //    {
+            //        PredictionOptions = new Bot.Builder.AI.LuisV3.LuisPredictionOptions
+            //        {
+            //            IncludeInstanceData = true,
+            //        }
+            //    };
 
-                var _recognizer = new LuisRecognizer(recognizerOptions);
-            }
+            //    var _recognizer = new LuisRecognizer(recognizerOptions);
+            //}
 
 
         }
