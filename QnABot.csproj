@@ -21,4 +21,5 @@
     </ItemGroup>
 
     <Import Project="PostDeployScripts\IncludeSources.targets" />
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v.*\Web\Microsoft.Web.Publishing.targets" />
 </Project>
